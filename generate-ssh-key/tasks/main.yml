@@ -1,0 +1,5 @@
+---
+- name: Generate SSH key
+  command: ssh-keygen -t rsa -b 4096 -f "{{ssh_key_path}}" -C "{{ssh_email}}" -q -N ""
+  args:
+    creates: "{{ssh_key_path}}"

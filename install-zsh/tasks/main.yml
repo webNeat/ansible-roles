@@ -1,0 +1,44 @@
+---
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+  become: true
+
+- name: Check if oh my zsh is installed
+  stat: path="~/.oh-my-zsh"
+  register: omz
+
+- name: Download oh my zsh install script
+  command: wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O ~/install.sh
+  when: not omz.stat.exists
+
+- name: Install oh my zsh
+  command: bash ~/install.sh --unattended
+  when: not omz.stat.exists
+
+- name: Remove oh my zsh install script
+  file:
+    path: ~/install.sh
+    state: absent
+
+- name: Install autosuggestions plugin
+  command: git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  args:
+    creates: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+- name: Install syntax highlighting plugin
+  command: git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  args:
+    creates: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+- name: Install theme
+  command: git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+  args:
+    creates: ~/.oh-my-zsh/custom/themes/powerlevel10k
+
+- name: Update nginx confs
+  template: "src=../templates/.zshrc dest=~/.zshrc"
+
+# - name: Make zsh the default shell
+#   command: chsh -s "$(which zsh)"

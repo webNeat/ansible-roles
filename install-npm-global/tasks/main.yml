@@ -1,0 +1,3 @@
+---
+- name: install {{npm_packages}}
+  command: npm install -g {{npm_packages}}

@@ -1,0 +1,35 @@
+---
+- name: Check if the SSL certificate already exists
+  stat: path="/etc/letsencrypt/live/{{site_name}}/fullchain.pem"
+  register: certificate_file
+  become: true
+
+- name: Add site to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "127.0.0.1 {{site_name}}"
+    state: present
+  become: true
+
+- name: Generate SSL Certificate
+  command: certbot certonly --nginx -d {{site_name}} -m {{ admin_email }} --agree-tos
+  when: with_cert and not certificate_file.stat.exists
+  become: true
+
+- name: Create nginx config file with certificate
+  template: "src=../templates/site-with-cert.conf dest=/etc/nginx/sites-available/{{site_name}}"
+  become: true
+  when: with_cert
+
+- name: Create nginx config file without certificate
+  template: "src=../templates/site.conf dest=/etc/nginx/sites-available/{{site_name}}"
+  become: true
+  when: not with_cert
+
+- name: Enable nginx config file
+  file: src=/etc/nginx/sites-available/{{site_name}} dest=/etc/nginx/sites-enabled/{{site_name}} state=link
+  become: true
+  
+- name: Restart nginx
+  service: name=nginx state=restarted
+  become: true

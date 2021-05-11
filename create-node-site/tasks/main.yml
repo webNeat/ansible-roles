@@ -1,0 +1,32 @@
+---
+- name: Create nginx proxy site
+  include_role:
+    name: create-nginx-proxy-site
+
+- name: Create site directory for {{site_name}}
+  file:
+    path: ~/sites/{{site_name}}
+    state: directory
+
+- name: Clone repository of {{site_name}}
+  command: git clone "{{repo_url}}" "~/sites/{{site_name}}/code"
+  args:
+    creates: "~/sites/{{site_name}}/code"
+    
+- name: Copy env files for {{site_name}}
+  copy:
+    src: "{{site_env_dir}}/"
+    dest: ~/sites/{{site_name}}/code
+  
+- name: Create deploy script
+  template:
+    src: ../templates/deploy.sh
+    dest: ~/sites/{{site_name}}/deploy.sh
+    mode: '755'
+
+- name: Setup application cron job for {{site_name}}
+  when: with_cron
+  cron:
+    name: app-{{site_name}}
+    job: "cd ~/sites/{{site_name}}/code && npm run cron"
+    special_time: hourly

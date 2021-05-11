@@ -1,0 +1,25 @@
+---
+- name: Download Docker setup script
+  command: wget https://get.docker.com -O get-docker.sh
+
+- name: Make Docker setup script executable
+  command: chmod +x ./get-docker.sh
+
+- name: Install Docker
+  command: ./get-docker.sh
+  become: true
+
+- name: Remove Docker setup script
+  command: rm get-docker.sh
+
+- name: Add user to Docker group
+  command: usermod -aG docker {{linux_username}}
+  become: true
+
+- name: Install docker-compose
+  command: wget "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-x86_64" -O /usr/local/bin/docker-compose
+  become: true
+
+- name: Make docker-compose executable
+  command: chmod +x /usr/local/bin/docker-compose
+  become: true
