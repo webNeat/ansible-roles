@@ -1,12 +1,12 @@
 ---
 - name: Restart ufw
-  become: yes
+  become: true
   service:
     name: ufw
     state: restarted
 
 - name: Restart nginx
-  become: yes
+  become: true
   service:
     name: nginx
     state: restarted

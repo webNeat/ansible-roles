@@ -1,13 +1,13 @@
 ---
 - name: Update apt cache
   apt: update_cache=yes cache_valid_time=3600
-  become: yes
+  become: true
 
 - name: install git
   apt:
     name: git
     state: present
-  become: yes
+  become: true
 
 - name: configure git user.name
   shell: git config --global user.name "{{git_name}}"

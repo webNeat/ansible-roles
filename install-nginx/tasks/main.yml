@@ -1,7 +1,7 @@
 ---
 - name: Update apt cache
   apt: update_cache=yes cache_valid_time=3600
-  become: yes
+  become: true
 
 - name: Install nginx
   apt:
@@ -9,22 +9,22 @@
       - nginx
       - ufw
     state: present
-  become: yes
+  become: true
 
 - name: Update nginx confs
   template: "src=../templates/default-site.conf dest=/etc/nginx/sites-available/default"
-  become: yes
+  become: true
 
 - name: Allow http in ufw
-  become: yes
+  become: true
   command: ufw allow 'Nginx HTTP'
 
 - name: Allow https in ufw
-  become: yes
+  become: true
   command: ufw allow https
 
 - name: Enable default site
   file: src=/etc/nginx/sites-available/default dest=/etc/nginx/sites-enabled/default state=link
   notify:
     - restart nginx
-  become: yes
+  become: true

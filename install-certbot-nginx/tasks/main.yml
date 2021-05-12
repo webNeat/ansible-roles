@@ -3,12 +3,12 @@
   apt:
     name: snapd
     state: present
-  become: yes
+  become: true
 
 - name: Install certbot using snap
   command: snap install --classic certbot
-  become: yes
+  become: true
 
 - name: Prepare the certbot command
   file: src=/snap/bin/certbot dest=/usr/bin/certbot state=link
-  become: yes
+  become: true

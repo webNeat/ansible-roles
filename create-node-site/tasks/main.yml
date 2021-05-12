@@ -29,4 +29,3 @@
   cron:
     name: app-{{site_name}}
     job: "cd ~/sites/{{site_name}}/code && npm run cron"
-    special_time: hourly
