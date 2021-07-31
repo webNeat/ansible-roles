@@ -1,0 +1,24 @@
+---
+- name: install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+  become: true
+
+- name: add repo for ondrej/php
+  apt_repository:
+    repo: ppa:ondrej/php
+    update_cache: true
+  become: true
+
+- name: install php8.0
+  apt:
+    name: php8.0
+    state: present
+  become: true
+
+- name: install {{php_extensions}}
+  apt:
+    name: {{php_extensions}}
+    state: present
+  become: true
