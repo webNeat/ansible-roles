@@ -17,12 +17,12 @@
   become: true
 
 - name: Create nginx config file with certificate
-  template: "src=../templates/site-with-cert.conf dest=/etc/nginx/sites-available/{{site_name}}"
+  template: "src=../templates/{{nginx_config_type}}-ssl.conf dest=/etc/nginx/sites-available/{{site_name}}"
   become: true
   when: with_cert
 
 - name: Create nginx config file without certificate
-  template: "src=../templates/site.conf dest=/etc/nginx/sites-available/{{site_name}}"
+  template: "src=../templates/{{nginx_config_type}}.conf dest=/etc/nginx/sites-available/{{site_name}}"
   become: true
   when: not with_cert
 
