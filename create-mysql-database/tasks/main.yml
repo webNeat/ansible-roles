@@ -1,0 +1,12 @@
+---
+- name: Create MySQL user {{db_user_name}}
+  shell: mysql -e "CREATE USER IF NOT EXISTS '{{db_user_name}}'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{db_user_pass}}';"
+  become: true
+
+- name: Create MySQL database {{db_name}}
+  shell: mysql -e "CREATE DATABASE IF NOT EXISTS {{db_name}};"
+  become: true
+
+- name: Give permissions to the user {{db_user_name}} on database {{db_name}}
+  shell: mysql -e "GRANT ALL ON {{db_name}}.* TO '{{db_user_name}}'@'localhost';"
+  become: true

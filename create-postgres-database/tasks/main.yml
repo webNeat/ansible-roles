@@ -1,15 +1,15 @@
 ---
-- name: Create Postgres Database
+- name: Create Postgres Database {{db_name}}
   shell: echo "SELECT 'CREATE DATABASE {{db_name}}' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{db_name}}')\gexec" | psql
   become: true
   become_user: postgres
   
-- name: Create Postgres Role
+- name: Create Postgres Role {{db_user_name}}
   shell: echo "SELECT 'CREATE USER {{db_user_name}} WITH PASSWORD ''{{db_user_pass}}''' WHERE NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '{{db_user_name}}')\gexec" | psql
   become: true
   become_user: postgres
 
-- name: Give permissions to the user
+- name: Give permissions to the user {{db_user_name}} on database {{db_name}}
   command: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{db_name}} TO {{db_user_name}};"
   become: true
   become_user: postgres
