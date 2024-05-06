@@ -1,6 +1,6 @@
 # Ansible roles
 
-A collection of Ansible roles for web developers, tested on Ubuntu 20.04.
+A collection of Ansible roles for web developers, tested on Ubuntu 22.04.
 
 # Contents
 
@@ -12,6 +12,11 @@ A collection of Ansible roles for web developers, tested on Ubuntu 20.04.
 # Installation
 
 - Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) on your local machine.
+```
+sudo apt update
+sudo apt install -y pipx
+pipx install --include-deps ansible
+```
 - Create a directory where you will store your servers paybooks.
 - Inside that directory, clone this repository and name it `roles`:
 ```
